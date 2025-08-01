@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3 uid="uid://bf46cdgcqriwb"]
+
+[ext_resource type="Script" uid="uid://c700lefd8nhbd" path="res://scripts/player.gd" id="1_2djwe"]
+[ext_resource type="Script" uid="uid://djkq5xv7mpg5w" path="res://scripts/pinch_loop_controller.gd" id="2_reoop"]
+[ext_resource type="Script" uid="uid://cdbfyygd3siur" path="res://scripts/player_detection.gd" id="3_4jfb6"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_rwvw1"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_52vux"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_52vux"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_reoop"]
+
+[node name="Player3D" type="CharacterBody3D" node_paths=PackedStringArray("detection", "pinch_loop")]
+script = ExtResource("1_2djwe")
+detection = NodePath("PlayerDetection")
+pinch_loop = NodePath("Head/LeftArm(Pinch)")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_rwvw1")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_52vux")
+
+[node name="Head" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.540686, -0.550574)
+
+[node name="LeftArm(Pinch)" type="Node3D" parent="Head" node_paths=PackedStringArray("arm_pivot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.872733, 0, 0)
+script = ExtResource("2_reoop")
+arm_pivot = NodePath(".")
+sensitivity = 0.001
+pivot_high_clamp = 25.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Head/LeftArm(Pinch)"]
+transform = Transform3D(0.2, 0, 0, 0, 0.209195, -0.181653, 0, 0.454134, 0.0836781, 0, 0.292155, -1.03569)
+mesh = SubResource("CapsuleMesh_52vux")
+
+[node name="Hand" type="Node3D" parent="Head/LeftArm(Pinch)"]
+transform = Transform3D(1, 0, 0, 0, 0.931621, 0.36343, 0, -0.36343, 0.931621, 0.0295157, 0.165284, -1.37376)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Head/LeftArm(Pinch)/Hand"]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+mesh = SubResource("BoxMesh_reoop")
+
+[node name="RightArm(Fist)" type="Node3D" parent="Head"]
+
+[node name="PlayerDetection" type="Node3D" parent="."]
+script = ExtResource("3_4jfb6")

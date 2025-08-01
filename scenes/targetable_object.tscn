@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://cjsxahiqh185j"]
+
+[ext_resource type="Script" uid="uid://ce5jv8kcfbq4x" path="res://scripts/target.gd" id="1_g8gji"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_g8gji"]
+
+[node name="TargetableObject" type="Node3D" node_paths=PackedStringArray("eyes")]
+script = ExtResource("1_g8gji")
+eyes = NodePath("Eyes")
+hand_height_tolerance = 0.05
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_g8gji")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.703572, 0, 0, 0, 0.277153, 0, 0, 0, 0.255054, 0, 0.473322, -0.615728)
+mesh = SubResource("BoxMesh_g8gji")
+
+[node name="DetectedText" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.989156, 0)
+billboard = 1
+text = "Well shit"
+
+[node name="Eyes" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.465643, -0.730672)
