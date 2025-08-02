@@ -3,13 +3,14 @@ extends CharacterBody3D
 
 @export_group("Components")
 @export var pinch_loop : PinchLoopController
+@export var right_hand_anim: HandAnimator
 
 @export_group("Movement Variables")
 @export var speed : float = 5.0
-@export var gravity : float = 9.8
+@export var jump_vel : float = 7.0
+@export var gravity : float = 20.0
 @export var sensitivity: float = 0.001
 @export var dash_speed: float = 30.0
-@export var dash_duration: float = 0.2  # Durée en secondes
 
 @onready var pivot: Node3D = $Head
 @onready var camera_3d: Camera3D = $Head/Camera3D
@@ -22,7 +23,11 @@ var movement_locked: bool
 
 var is_dashing: bool
 var dash_direction: Vector3 = Vector3.ZERO
-var dash_timer: float = 0.0
+
+const BOB_FREQ: float = 3.0
+const BOB_AMP: float = 0.1
+
+var t_bob: float
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -53,28 +58,48 @@ func _input(event: InputEvent) -> void:
 func _physics_process(delta: float) -> void:
 	if(is_dashing):
 		velocity = dash_direction * dash_speed
-		dash_timer -= delta
-		if dash_timer <= 0.0:
-			is_dashing = false
-			velocity = Vector3.ZERO
 	else:
 		if(not is_on_floor()):
 			velocity.y -= gravity * delta
 			
 		if(movement_locked):
 			return
-			
+		
+		if Input.is_action_just_pressed("jump"):
+			velocity.y = jump_vel
+		
 		input_dir = Input.get_vector("move_left", "move_right", "move_front", "move_back") 
 		direction = (transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()
 		
 		velocity.x = direction.x * speed
 		velocity.z = direction.z * speed
+		
+		# Head bob
+		t_bob += delta * velocity.length() * float(is_on_floor())
+		pivot.transform.origin = headbob(t_bob)
 	
 	move_and_slide()
+	
+	for i in get_slide_collision_count():
+		var collision := get_slide_collision(i)
+		var other := collision.get_collider()
+		if other is Enemy:
+			(other as Enemy).on_collision_with_player()
 
 func toggle_movement_inputs() -> void:
 	movement_locked = !movement_locked
-	print("movement_locked " + str(movement_locked))
 
 func on_mouse_activate() -> void:
 	pass
+
+func headbob(t: float) -> Vector3:
+	var pos: Vector3 = Vector3.ZERO
+	pos.y = sin(t * BOB_FREQ) * BOB_AMP
+	pos.x = cos(t * BOB_FREQ / 2) * BOB_AMP / 3
+	return pos
+
+func stop_dash() -> void:
+	camera_3d.fov = 75.0
+	is_dashing = false
+	velocity = Vector3.ZERO
+	right_hand_anim.animate_fist_release()

@@ -1,0 +1,60 @@
+[gd_scene load_steps=8 format=3 uid="uid://dhkfaapet36xi"]
+
+[ext_resource type="PackedScene" uid="uid://bf46cdgcqriwb" path="res://scenes/Player/player_3d.tscn" id="1_d26wb"]
+[ext_resource type="PackedScene" uid="uid://n7arvv3xjrnx" path="res://scenes/Enemy/enemy.tscn" id="2_gv18h"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_a5oyu"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_g7g4h"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_j8ivh"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_nd71p"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_j8ivh"]
+vertices = PackedVector3Array(-23, 0.5, 4, -4, 0.5, 4, -3, 0.5, 2, 2.75, 0.5, -2, 4.25, 0.5, -2.5, 4.25, 0.5, -23, -23, 0.5, -23, 6.75, 0.5, -1.25, 11, 0.5, 5.5, 23, 0.5, 5.5, 5, 0.5, -2.5, 23, 0.5, -23, 0.75, 4.25, 4.25, 2.75, 4.25, 7.5, 6.25, 4.25, 5.5, 4.25, 4.25, 2, 2.75, 0.5, 7, 3.5, 0.5, 7, 5.75, 0.5, 5.25, 4, 0.5, 2.5, 1.25, 0.5, 4.25, 2.5, 0.5, 23, 2.5, 0.5, 12.25, 0.5, 0.5, 11.25, -3.5, 0.5, 5.5, -23, 0.5, 23, 4, 0.5, 11.75, 9.75, 0.5, 7.75, 23, 0.5, 23)
+polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(5, 4, 3), PackedInt32Array(2, 0, 3), PackedInt32Array(3, 0, 5), PackedInt32Array(5, 0, 6), PackedInt32Array(9, 8, 7), PackedInt32Array(7, 10, 9), PackedInt32Array(9, 10, 5), PackedInt32Array(9, 5, 11), PackedInt32Array(10, 4, 5), PackedInt32Array(13, 12, 14), PackedInt32Array(14, 12, 15), PackedInt32Array(17, 16, 18), PackedInt32Array(18, 16, 20), PackedInt32Array(18, 20, 19), PackedInt32Array(23, 22, 21), PackedInt32Array(23, 21, 24), PackedInt32Array(24, 21, 0), PackedInt32Array(0, 21, 25), PackedInt32Array(0, 1, 24), PackedInt32Array(21, 22, 26), PackedInt32Array(27, 8, 9), PackedInt32Array(26, 27, 21), PackedInt32Array(21, 27, 9), PackedInt32Array(21, 9, 28)]
+agent_radius = 2.0
+
+[node name="TestScene" type="Node3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(50, 0, 0, 0, 1, 0, 0, 0, 50, 0, -0.5, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("BoxMesh_a5oyu")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_g7g4h")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.355433, 0.934702, 0, -0.934702, 0.355433, 0, 0, 0)
+
+[node name="Player3D" parent="." instance=ExtResource("1_d26wb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="TestWall" type="StaticBody3D" parent="."]
+transform = Transform3D(6.39296, 0, 0.567844, 0, 6.88385, 0, -4.4102, 0, 0.823136, -3.73346, 0.30652, -6.39921)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TestWall"]
+shape = SubResource("BoxShape3D_j8ivh")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TestWall"]
+mesh = SubResource("BoxMesh_nd71p")
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_j8ivh")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+size = Vector3(50, 1, 50)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="NavigationRegion3D"]
+transform = Transform3D(0.571258, 0, -0.820771, 0, 1, 0, 0.820771, 0, 0.571258, 3.4852, 1.54874, 4.81096)
+use_collision = true
+size = Vector3(7.51453, 4.42285, 7.75861)
+
+[node name="Enemy" parent="." instance=ExtResource("2_gv18h")]
+transform = Transform3D(0.694244, 0, 0.71974, 0, 1, 0, -0.71974, 0, 0.694244, 0, 1, 12.2648)
+contact_distance = 1.0

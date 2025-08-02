@@ -1,6 +1,7 @@
 class_name PinchLoopController
 extends Node3D
 
+@export var hand_animator: HandAnimator
 @export var arm_pivot: Node3D
 @export var sensitivity: float
 @export var pivot_high_clamp: float
@@ -21,13 +22,17 @@ func _input(event: InputEvent) -> void:
 		
 	if event.is_action_pressed("pinch_index"):
 		index_pressed = true
+		hand_animator.animate_index()
 	if event.is_action_released("pinch_index"):
 		index_pressed = false
+		hand_animator.animate_index_release()
 		
 	if event.is_action_pressed("pinch_thumb"):
 		thumb_pressed = true
+		hand_animator.animate_thumb()
 	if event.is_action_released("pinch_thumb"):
 		thumb_pressed = false
+		hand_animator.animate_thumb_release()
 		
 	enable_pinch(thumb_pressed && index_pressed)
 	
@@ -47,11 +52,9 @@ func enable_pinch(enabled: bool) -> void:
 	
 	if(is_pinching):
 		on_loop_start.emit()
-		print("started pinching")
 	else:
 		on_loop_stop.emit()
 		arm_pivot.rotation.x = 0.0
-		print("stopped pinching")
 
 func get_hand_height() -> float:
 	return hand.global_position.y

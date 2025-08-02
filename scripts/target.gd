@@ -4,13 +4,12 @@ extends Node3D
 @export var eyes: Node3D
 @export var facing_angle_tolerance_deg: float = 20.0
 @export var hand_height_tolerance: float = 0.5
-
-@onready var detected_text: Label3D = $DetectedText
+@export var detected_text: Label3D
 
 var player: Player
 
 var in_sight: bool
-var distance_to_player: float
+var distance_to_player: float = INF
 var in_player_range: bool
 var is_targeted: bool
 var is_visible: bool
@@ -27,7 +26,7 @@ func _process(delta: float) -> void:
 	if(distance_to_player > player.detection.detection_range || !is_visible):
 		if(in_player_range):
 			in_player_range = false
-			player.detection.targets_in_range.erase(self)
+			pop_from_target_list()
 			set_punchable(false)
 		return
 	
@@ -40,7 +39,7 @@ func _process(delta: float) -> void:
 		return
 	
 	if(is_facing_position(player.global_position)):
-		if(absf(player.pinch_loop.get_hand_height() - eyes.global_position.y) <= hand_height_tolerance):
+		if(absf(player.pinch_loop.get_hand_height() - eyes.global_position.y) <= hand_height_tolerance && player.pinch_loop.is_pinching):
 			set_punchable(true)
 		
 
@@ -56,7 +55,8 @@ func set_target(value: bool) -> void:
 func set_punchable(value: bool) -> void:
 	is_punchable = value
 	# Code pour animation puncheable, outline etc
-	detected_text.visible = value
+	if(detected_text):
+		detected_text.visible = value
 
 func is_facing_position(position: Vector3, angle_tolerance_deg: float = facing_angle_tolerance_deg) -> bool:
 	var to_position: Vector3 = (position - global_position).normalized()
@@ -84,3 +84,6 @@ func check_is_visible() -> void:
 	
 	# Si le collider est la target elle-même, c'est visible
 	is_visible = result["collider"] == player
+
+func pop_from_target_list() -> void:
+	player.detection.targets_in_range.erase(self)

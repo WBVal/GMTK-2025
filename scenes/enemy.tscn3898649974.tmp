@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=3 uid="uid://n7arvv3xjrnx"]
+
+[ext_resource type="Script" uid="uid://ce5jv8kcfbq4x" path="res://scripts/target.gd" id="1_7p1mj"]
+[ext_resource type="Script" uid="uid://dmh84o2fbrgha" path="res://scripts/enemy.gd" id="1_md0e3"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_md0e3"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_md0e3"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4ra3w"]
+
+[node name="Enemy" type="CharacterBody3D" node_paths=PackedStringArray("targetable", "navigation_agent_3d")]
+script = ExtResource("1_md0e3")
+targetable = NodePath("Target")
+chase_threshold_dist = 20.0
+speed = null
+agent_desired_distance = null
+navigation_agent_3d = NodePath("NavigationAgent3D")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_md0e3")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.658949, 0, 0, 0, 0.333881, 0, 0, 0, 0.333881, 0, 0.395269, -0.475875)
+mesh = SubResource("BoxMesh_md0e3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_4ra3w")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+debug_enabled = true
+
+[node name="Target" type="Node3D" parent="." node_paths=PackedStringArray("eyes", "detected_text")]
+script = ExtResource("1_7p1mj")
+eyes = NodePath("../Eyes")
+hand_height_tolerance = 0.05
+detected_text = NodePath("../Label3D")
+metadata/_custom_type_script = "uid://ce5jv8kcfbq4x"
+
+[node name="Eyes" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.41405, -0.583281)
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.632784, 1.23865, 0)
+billboard = 1
+text = "oh shit..."

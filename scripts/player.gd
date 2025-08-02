@@ -3,15 +3,22 @@ extends PlayerMovement
 
 @export var health: int = 100
 @export var detection: PlayerDetection
+@export var invincibility_duration: float = 1.0
+@export var can_take_dmg: bool = true
 
 func _init() -> void:
 	GameManager.Player = self
 	
 func take_damage(amount: int) -> void:
-	health = clampi(health - amount, 0, 100)
-	if(health == 0):
-		movement_locked = true
-		print("Game Over")
+	if(can_take_dmg):
+		print("player took dmg")
+		health = clampi(health - amount, 0, 100)
+		can_take_dmg = false
+		if(health == 0):
+			movement_locked = true
+			print("Game Over")
+			return
+		_call_later_reset_cooldown()
 
 func on_mouse_activate() -> void:
 	if detection.best_target:
@@ -20,6 +27,11 @@ func on_mouse_activate() -> void:
 	
 func dash_to_target(target_position: Vector3) -> void:
 	var direction: Vector3 = (target_position - global_position).normalized()
+	camera_3d.fov = 85.0
 	dash_direction = direction
-	dash_timer = dash_duration
 	is_dashing = true
+	right_hand_anim.animate_fist()
+
+func _call_later_reset_cooldown() -> void:
+	await get_tree().create_timer(invincibility_duration).timeout
+	can_take_dmg = true

@@ -1,0 +1,127 @@
+[gd_scene load_steps=7 format=3 uid="uid://b4qoahh7eplxy"]
+
+[ext_resource type="PackedScene" uid="uid://bf46cdgcqriwb" path="res://scenes/Player/player_3d.tscn" id="1_ienta"]
+[ext_resource type="PackedScene" uid="uid://n7arvv3xjrnx" path="res://scenes/Enemy/enemy.tscn" id="2_x17fs"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_x17fs"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sbj3q"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ienta"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_x17fs"]
+vertices = PackedVector3Array(-28.1294, 0.53771, -41.7768, -28.1294, 0.53771, -42.7768, -28.6294, 0.53771, -43.0268, -49.3794, 0.53771, -27.7768, -48.8794, 0.53771, -27.0268, -33.3794, 0.53771, -23.0268, -44.1294, 0.53771, -47.0268)
+polygons = [PackedInt32Array(0, 2, 1), PackedInt32Array(4, 3, 5), PackedInt32Array(5, 3, 0), PackedInt32Array(0, 3, 2), PackedInt32Array(2, 3, 6)]
+
+[node name="MainLevel" type="Node3D"]
+
+[node name="Start" type="Node3D" parent="."]
+visible = false
+
+[node name="Env" type="Node3D" parent="Start"]
+
+[node name="Ground" type="StaticBody3D" parent="Start/Env"]
+transform = Transform3D(7, 0, 0, 0, 1, 0, 0, 0, 17, 0, -0.5, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Start/Env/Ground"]
+mesh = SubResource("BoxMesh_x17fs")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Start/Env/Ground"]
+shape = SubResource("BoxShape3D_sbj3q")
+
+[node name="Ground2" type="StaticBody3D" parent="Start/Env"]
+transform = Transform3D(7, 0, 0, 0, 1, 0, 0, 0, 2.72, 0, 2.5, -10)
+
+[node name="Mesh" type="MeshInstance3D" parent="Start/Env/Ground2"]
+mesh = SubResource("BoxMesh_x17fs")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Start/Env/Ground2"]
+shape = SubResource("BoxShape3D_sbj3q")
+
+[node name="Slope" type="StaticBody3D" parent="Start/Env"]
+transform = Transform3D(4.2, 0, 0, 0, 0.866025, -3.4, 0, 0.5, 5.88897, 0, 0.873994, -5.95846)
+
+[node name="Mesh" type="MeshInstance3D" parent="Start/Env/Slope"]
+mesh = SubResource("BoxMesh_x17fs")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Start/Env/Slope"]
+shape = SubResource("BoxShape3D_ienta")
+
+[node name="Player3D" parent="." instance=ExtResource("1_ienta")]
+transform = Transform3D(0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, 0.258819, -14.1117, 2.56895, -29.0795)
+
+[node name="Room1" type="Node3D" parent="."]
+
+[node name="Env" type="Node3D" parent="Room1"]
+
+[node name="Ground1" type="StaticBody3D" parent="Room1/Env"]
+transform = Transform3D(7, 0, 0, 0, 1, 0, 0, 0, 4.352, 0, -0.5, 6.957)
+
+[node name="Mesh" type="MeshInstance3D" parent="Room1/Env/Ground1"]
+mesh = SubResource("BoxMesh_x17fs")
+skeleton = NodePath("../../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room1/Env/Ground1"]
+shape = SubResource("BoxShape3D_sbj3q")
+
+[node name="Ground2" type="StaticBody3D" parent="Room1/Env"]
+transform = Transform3D(21.42, 0, 0, 0, 1, 0, 0, 0, 17.6691, 0, -0.5, -4.043)
+
+[node name="Mesh" type="MeshInstance3D" parent="Room1/Env/Ground2"]
+mesh = SubResource("BoxMesh_x17fs")
+skeleton = NodePath("../../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room1/Env/Ground2"]
+shape = SubResource("BoxShape3D_sbj3q")
+
+[node name="Ground4" type="StaticBody3D" parent="Room1/Env"]
+transform = Transform3D(5.5439, 0, 17.0671, 0, 1, 0, -20.6901, 0, 4.5731, -38.6503, -0.5, -34.9997)
+
+[node name="Mesh" type="MeshInstance3D" parent="Room1/Env/Ground4"]
+mesh = SubResource("BoxMesh_x17fs")
+skeleton = NodePath("../../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room1/Env/Ground4"]
+shape = SubResource("BoxShape3D_sbj3q")
+
+[node name="Ground3" type="StaticBody3D" parent="Room1/Env"]
+transform = Transform3D(5.411, 0, 9.35308, 0, 11.3111, 0, -9.37213, 0, 5.4, -17.2715, -4.08662, -28.1377)
+
+[node name="Mesh" type="MeshInstance3D" parent="Room1/Env/Ground3"]
+mesh = SubResource("BoxMesh_x17fs")
+skeleton = NodePath("../../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room1/Env/Ground3"]
+shape = SubResource("BoxShape3D_sbj3q")
+
+[node name="LavaSlope" type="StaticBody3D" parent="Room1/Env"]
+transform = Transform3D(15.755, 0.4407, -2.91321, -10.5033, 0.881399, 6.06627e-08, 9.09615, 0.254438, 5.04583, -5.91697, -2.43185, -21.3755)
+
+[node name="Mesh" type="MeshInstance3D" parent="Room1/Env/LavaSlope"]
+mesh = SubResource("BoxMesh_x17fs")
+skeleton = NodePath("../../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room1/Env/LavaSlope"]
+shape = SubResource("BoxShape3D_sbj3q")
+
+[node name="Enemies" type="Node3D" parent="Room1"]
+
+[node name="Enemy2" parent="Room1/Enemies" instance=ExtResource("2_x17fs")]
+transform = Transform3D(-0.18378, 0, -0.982967, 0, 1, 0, 0.982967, 0, -0.18378, -31.9815, 0.999996, -32.6787)
+
+[node name="Target" parent="Room1/Enemies/Enemy2" index="3"]
+facing_angle_tolerance_deg = 45.0
+hand_height_tolerance = 5.0
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="Room1"]
+navigation_mesh = SubResource("NavigationMesh_x17fs")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Room1/NavigationRegion3D"]
+transform = Transform3D(0.258819, 0, 0.965926, 0, 1, 0, -0.965926, 0, 0.258819, -38.7117, -0.46229, -35.0193)
+use_collision = true
+size = Vector3(21.2255, 1, 17.436)
+
+[editable path="Room1/Enemies/Enemy2"]
