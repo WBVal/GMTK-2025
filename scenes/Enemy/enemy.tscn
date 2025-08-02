@@ -20,7 +20,7 @@ speed = 2.0
 navigation_agent_3d = NodePath("NavigationAgent3D")
 
 [node name="goblin" parent="." instance=ExtResource("2_4ra3w")]
-transform = Transform3D(-0.988907, 0, -0.148534, 0, 1, 0, 0.148534, 0, -0.988907, 0, -0.787319, 0)
+transform = Transform3D(-0.988907, 0, -0.148534, 0, 1, 0, 0.148534, 0, -0.988907, 0, -0.941782, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_4ra3w")

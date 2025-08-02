@@ -80,8 +80,6 @@ func update_state(state: State) -> void:
 	
 	match state:
 		State.IDLE:
-			print("idle")
 			animator.idle()
 		State.RUNNING:
-			print("run")
 			animator.run()

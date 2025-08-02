@@ -29,6 +29,8 @@ const BOB_AMP: float = 0.1
 
 var t_bob: float
 
+var on_moving_platform_velocity: Vector3 = Vector3.ZERO
+
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
@@ -59,26 +61,30 @@ func _physics_process(delta: float) -> void:
 	if(is_dashing):
 		velocity = dash_direction * dash_speed
 	else:
-		if(not is_on_floor()):
-			velocity.y -= gravity * delta
+		if(!movement_locked):
+			if Input.is_action_just_pressed("jump") && is_on_floor():
+				velocity.y = jump_vel
 			
-		if(movement_locked):
-			return
+			input_dir = Input.get_vector("move_left", "move_right", "move_front", "move_back") 
+			direction = (transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()
+			
+			velocity.x = direction.x * speed
+			velocity.z = direction.z * speed
 		
-		if Input.is_action_just_pressed("jump"):
-			velocity.y = jump_vel
+			# Head bob
+			t_bob += delta * velocity.length() * float(is_on_floor())
+			pivot.transform.origin = headbob(t_bob)
+		else:
+			velocity = Vector3.ZERO
+	
+	if(not is_on_floor()):
+		velocity.y -= gravity * delta
 		
-		input_dir = Input.get_vector("move_left", "move_right", "move_front", "move_back") 
-		direction = (transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()
-		
-		velocity.x = direction.x * speed
-		velocity.z = direction.z * speed
-		
-		# Head bob
-		t_bob += delta * velocity.length() * float(is_on_floor())
-		pivot.transform.origin = headbob(t_bob)
+	velocity += on_moving_platform_velocity
 	
 	move_and_slide()
+	
+	on_moving_platform_velocity = Vector3.ZERO
 	
 	for i in get_slide_collision_count():
 		var collision := get_slide_collision(i)
