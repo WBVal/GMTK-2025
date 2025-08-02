@@ -55,7 +55,7 @@ func on_punched() -> void:
 	
 
 func attack_player() -> void:
-	if not can_attack:
+	if not can_attack || targetable.player.is_dashing:
 		return
 
 	animator.attack()
